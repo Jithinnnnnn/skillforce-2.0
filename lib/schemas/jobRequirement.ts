@@ -38,7 +38,7 @@ export const JobRequirementSchema = z.object({
     .max(2000, "Description must be at most 2000 characters"),
 
   role: z.enum(JOB_ROLES, {
-    errorMap: () => ({ message: "Please select a valid role" }),
+    message: "Please select a valid role",
   }),
 
   // ---- Dates & Timing ----
@@ -70,11 +70,11 @@ export const JobRequirementSchema = z.object({
   // ---- Payment ----
   payment: z.object({
     amount: z
-      .number({ invalid_type_error: "Amount must be a number" })
+      .number({ message: "Amount must be a number" })
       .positive("Amount must be greater than zero"),
     currency: z.string().default("INR"),
     paymentTerms: z.enum(PAYMENT_TERMS, {
-      errorMap: () => ({ message: "Please select valid payment terms" }),
+      message: "Please select valid payment terms",
     }),
   }),
 

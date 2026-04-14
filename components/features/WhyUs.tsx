@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 import {
   Shield,
   MapPin,
@@ -41,19 +41,23 @@ const cardVariants = {
     transition: {
       delay: i * 0.08,
       duration: 0.4,
-      ease: [0.22, 1, 0.36, 1],
+      ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
     },
   }),
-};
+} satisfies Variants;
 
 const mockupVariants = {
   hidden: { opacity: 0, x: 20 },
   visible: {
     opacity: 1,
     x: 0,
-    transition: { duration: 0.5, delay: 0.2, ease: [0.22, 1, 0.36, 1] },
+    transition: {
+      duration: 0.5,
+      delay: 0.2,
+      ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
+    },
   },
-};
+} satisfies Variants;
 
 export function WhyUs() {
   return (

@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 
 const steps = [
   {
@@ -28,10 +28,10 @@ const cardVariants = {
     transition: {
       delay: i * 0.12,
       duration: 0.45,
-      ease: [0.22, 1, 0.36, 1],
+      ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
     },
   }),
-};
+} satisfies Variants;
 
 export function HowItWorks() {
   return (
