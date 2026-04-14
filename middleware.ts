@@ -19,13 +19,7 @@ function isAdminPath(pathname: string): boolean {
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // WARNING: DEVELOPMENT ONLY — DO NOT DEPLOY.
-  // Bypass authentication for all dashboard routes in development mode.
-  if (process.env.NODE_ENV === "development" && isProtectedPath(pathname)) {
-    return NextResponse.next();
-  }
-
-  const cookieHeader = request.headers.get("cookie") ?? undefined;
+const cookieHeader = request.headers.get("cookie") ?? undefined;
 
   if (!isProtectedPath(pathname)) {
     return NextResponse.next();
