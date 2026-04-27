@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { UserRole } from "@/lib/auth";
@@ -52,9 +53,58 @@ const clayLink =
   "rounded-2xl px-2 py-1 transition-colors hover:text-slate-900 hover:shadow-[var(--shadow-button-inset)]";
 
 export function Navbar({ role = "guest", links }: NavbarProps) {
+  const router = useRouter();
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [categoryOpen, setCategoryOpen] = useState(false);
-  const resolvedLinks = links ?? getLinksForRole(role ?? "guest");
+  const [resolvedRole, setResolvedRole] = useState<UserRole | "guest">(
+    role && role !== "guest" ? role : "guest"
+  );
+  const resolvedLinks = links ?? getLinksForRole(resolvedRole);
+  const isAuthRoute = pathname === "/login" || pathname === "/signup" || pathname === "/forgot-password";
+
+  useEffect(() => {
+    setOpen(false);
+    setCategoryOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    const roleFromCookie = document.cookie
+      .split(";")
+      .map((part) => part.trim())
+      .find((part) => part.startsWith("sf_role="))
+      ?.split("=")[1]
+      ?.toLowerCase();
+
+    if (roleFromCookie === "admin" || roleFromCookie === "jobseeker" || roleFromCookie === "jobprovider") {
+      setResolvedRole(roleFromCookie);
+      return;
+    }
+
+    setResolvedRole("guest");
+  }, [pathname]);
+
+  useEffect(() => {
+    router.prefetch("/");
+    router.prefetch("/login");
+    router.prefetch("/signup");
+
+    if (resolvedRole === "admin") {
+      router.prefetch("/admin");
+      return;
+    }
+
+    if (resolvedRole === "jobseeker") {
+      router.prefetch("/jobseeker");
+      return;
+    }
+
+    if (resolvedRole === "jobprovider") {
+      router.prefetch("/jobprovider");
+    }
+  }, [resolvedRole, router]);
+
+  if (isAuthRoute) return null;
 
   return (
     <div className="pointer-events-none fixed inset-x-0 top-4 z-40 flex justify-center px-4 sm:px-6 lg:px-8">
@@ -136,9 +186,9 @@ export function Navbar({ role = "guest", links }: NavbarProps) {
         </div>
 
         <div className="flex items-center gap-2">
-          {role && role !== "guest" ? (
+          {resolvedRole !== "guest" ? (
             <Link
-              href={role === "admin" ? "/admin" : role === "jobseeker" ? "/jobseeker" : "/jobprovider"}
+              href={resolvedRole === "admin" ? "/admin" : resolvedRole === "jobseeker" ? "/jobseeker" : "/jobprovider"}
               className="hidden items-center gap-2 rounded-2xl border border-white/60 bg-primary px-4 py-1.5 text-xs font-medium text-primary-foreground shadow-[var(--clay-shadow)] hover:opacity-90 active:shadow-[var(--shadow-button-inset)] sm:inline-flex sm:text-sm"
             >
               Dashboard

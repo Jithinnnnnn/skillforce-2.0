@@ -16,11 +16,11 @@ export default function SignupPage() {
   const [showCf, setShowCf] = useState(false);
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen w-full flex-col overflow-x-hidden lg:flex-row">
       <AuthSidebar />
 
-      <div className="flex flex-1 items-center justify-center px-6 py-12">
-        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-sm space-y-8">
+      <div className="flex flex-1 items-center justify-center px-5 py-8 sm:px-6 sm:py-12">
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-md space-y-8">
 
           {/* Heading */}
           <div>
